@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#0f4c5c">
+<title>🏥 十一带爸妈 · 体检复查行动计划</title>
+<style>
+:root {
+  --bg:#f0f6f7; --card:#fff; --text:#12303a; --muted:#5b7078;
+  --deep:#0f4c5c; --teal:#0d9488; --sky:#0891b2; --blue:#0369a1;
+  --red:#dc2626; --orange:#ea580c; --green:#16a34a; --border:#d9e6e8;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg); color:var(--text); line-height:1.6;
+  padding:12px; -webkit-text-size-adjust:100%;
+}
+.container { max-width:800px; margin:0 auto; }
+.header {
+  background:linear-gradient(135deg,#0a3d4a,#0f4c5c,#0d9488);
+  color:#fff; padding:22px 20px 18px; border-radius:18px; margin-bottom:14px;
+  position:relative; overflow:hidden;
+}
+.header::after { content:'🏥'; position:absolute; right:16px; bottom:4px; font-size:54px; opacity:0.14; }
+.header h1 { font-size:21px; position:relative; z-index:1; }
+.header .sub { opacity:0.92; font-size:12px; margin-top:4px; position:relative; z-index:1; }
+.header .meta-row { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; position:relative; z-index:1; }
+.header .meta-row span { background:rgba(255,255,255,0.18); padding:4px 12px; border-radius:14px; font-size:11px; font-weight:600; }
+
+.hero-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:14px; }
+.stat-card { background:var(--card); border-radius:12px; padding:14px 8px; text-align:center; border:1px solid var(--border); box-shadow:0 1px 3px rgba(0,0,0,0.04); }
+.stat-card .sv { font-size:15px; font-weight:800; }
+.stat-card .sv.r { color:var(--red); } .stat-card .sv.t { color:var(--teal); }
+.stat-card .sv.b { color:var(--blue); } .stat-card .sv.g { color:var(--green); }
+.stat-card .sl { font-size:10px; color:var(--muted); margin-top:3px; line-height:1.5; }
+@media (max-width:500px){ .hero-stats{ grid-template-columns:repeat(2,1fr);} }
+
+.tabs { display:flex; gap:6px; margin-bottom:14px; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:2px; }
+.tab { flex:1 0 auto; padding:11px 13px; border-radius:12px; border:1.5px solid var(--border); background:var(--card); font-size:13px; font-weight:700; white-space:nowrap; cursor:pointer; text-align:center; transition:all .2s; color:var(--text); }
+.tab.active { background:linear-gradient(135deg,#0a3d4a,#0d9488); color:#fff; border-color:#0f4c5c; }
+.tab-content { display:none; }
+.tab-content.active { display:block; }
+
+.card { background:var(--card); border-radius:14px; padding:16px 18px; box-shadow:0 1px 3px rgba(0,0,0,0.04); border:1px solid var(--border); margin-bottom:12px; }
+.card h3 { font-size:15px; margin-bottom:10px; padding-bottom:8px; border-bottom:2px solid var(--border); display:flex; align-items:center; gap:6px; }
+.card h3 .badge { font-size:10px; font-weight:700; padding:2px 8px; border-radius:8px; margin-left:auto; }
+
+.pill { display:inline-block; padding:2px 9px; border-radius:10px; font-size:10px; font-weight:700; margin-right:4px; }
+.pill.red { background:#fee2e2; color:#b91c1c; }
+.pill.orange { background:#ffedd5; color:#c2410c; }
+.pill.teal { background:#ccfbf1; color:#0f766e; }
+.pill.gray { background:#f1f5f9; color:#64748b; }
+
+.alert { border-radius:12px; padding:12px 14px; margin-bottom:12px; font-size:12px; line-height:1.7; border:1.5px solid; }
+.alert.red { background:#fff1f2; border-color:#fecdd3; color:#9f1239; }
+.alert.orange { background:#fff7ed; border-color:#fed7aa; color:#9a3412; }
+.alert.teal { background:#f0fdfa; border-color:#99f6e4; color:#115e59; }
+
+.timeline { position:relative; padding-left:28px; }
+.timeline::before { content:''; position:absolute; left:10px; top:4px; bottom:4px; width:2.5px; background:linear-gradient(to bottom,var(--blue),var(--teal),var(--green)); border-radius:2px; }
+.tl-block { margin-bottom:14px; }
+.tl-block:last-child { margin-bottom:0; }
+.tl-time { position:relative; font-size:12px; font-weight:700; color:var(--deep); margin-bottom:4px; }
+.tl-time::before { content:''; position:absolute; left:-22px; top:4px; width:12px; height:12px; border-radius:50%; background:var(--teal); border:2.5px solid #fff; box-shadow:0 0 0 2px var(--teal); }
+.tl-card { background:#f5f9fa; border-radius:10px; padding:10px 14px; border:1px solid #dce8ea; font-size:12px; }
+.tl-card .tl-title { font-weight:700; font-size:13px; margin-bottom:3px; }
+.tl-card .tl-detail { font-size:12px; color:var(--muted); line-height:1.7; }
+
+.checklist { list-style:none; }
+.checklist li { display:flex; align-items:flex-start; gap:10px; padding:11px 4px; border-bottom:1px solid #f0f4f5; font-size:13px; }
+.checklist li:last-child { border-bottom:none; }
+.checklist input[type=checkbox] { width:18px; height:18px; margin-top:1px; accent-color:var(--teal); flex-shrink:0; cursor:pointer; }
+.checklist label { cursor:pointer; line-height:1.6; }
+.checklist .sub { display:block; font-size:11px; color:var(--muted); margin-top:2px; }
+
+table { width:100%; border-collapse:collapse; font-size:12px; }
+th,td { text-align:left; padding:8px 6px; border-bottom:1px solid #eef3f4; vertical-align:top; }
+th { color:var(--muted); font-weight:600; font-size:11px; }
+td b { color:var(--deep); }
+
+.phone-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+.phone-item { background:#f5f9fa; border:1px solid #e2ecee; border-radius:10px; padding:10px 12px; font-size:12px; }
+.phone-item .pn { font-weight:700; color:var(--deep); font-size:11px; }
+.phone-item .pp { color:var(--blue); font-weight:700; font-size:14px; margin-top:2px; }
+
+.footer { text-align:center; font-size:11px; color:var(--muted); padding:18px 0 8px; }
+.footer a { color:var(--blue); text-decoration:none; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="header">
+  <h1>🏥 十一带爸妈 · 体检复查行动计划</h1>
+  <div class="sub">淅川老家 · 10.1 晚到家 · 妈妈复查 + 爸爸体检</div>
+  <div class="meta-row">
+    <span>10.2 南阳市中心医院</span>
+    <span>10.3–10.7 淅川美年体检</span>
+    <span>众民保中高端2026 · 等待期已过</span>
+  </div>
+</div>
+
+<div class="hero-stats">
+  <div class="stat-card"><div class="sv r">👩 妈妈</div><div class="sl">甲状腺 4a + 脑梗<br>复查</div></div>
+  <div class="stat-card"><div class="sv b">👨 爸爸</div><div class="sl">首次全面体检<br>肺结节复查</div></div>
+  <div class="stat-card"><div class="sv t">🏥 医院</div><div class="sl">南阳市中心医院<br>甲状腺外科</div></div>
+  <div class="stat-card"><div class="sv g">🛡️ 保单</div><div class="sl">3.20 生效<br>等待期已过</div></div>
+</div>
+
+<div class="tabs" id="tabs">
+  <div class="tab active" data-t="g">🎯 概览</div>
+  <div class="tab" data-t="m">👩 妈妈复查</div>
+  <div class="tab" data-t="d">👨 爸爸体检</div>
+  <div class="tab" data-t="h">🏥 医院挂号</div>
+  <div class="tab" data-t="c">✅ 待办清单</div>
+</div>
+
+<!-- ============ 概览 ============ -->
+<div class="tab-content active" id="t-g">
+  <div class="card">
+    <h3>🗓️ 时间表</h3>
+    <div class="timeline">
+      <div class="tl-block">
+        <div class="tl-time">阶段一 · 现在 ~ 9 月底</div>
+        <div class="tl-card"><div class="tl-title">节前抢号 + 约体检 + 备材料</div>
+          <div class="tl-detail">① 抢挂南阳市中心医院「甲状腺外科 + 神经内科」② 约爸爸淅川美年体检（提前 3 个工作日）③ 备齐材料</div></div>
+      </div>
+      <div class="tl-block">
+        <div class="tl-time">10.2（周五）· 带妈妈去南阳</div>
+        <div class="tl-card"><div class="tl-title">南阳市中心医院 · 一天办两件事</div>
+          <div class="tl-detail">甲状腺外科看 4a 结节 + 神经内科做脑梗二级预防。淅川→南阳约 100 公里，早 7 点前出发。</div></div>
+      </div>
+      <div class="tl-block">
+        <div class="tl-time">10.3 – 10.7 · 爸爸体检</div>
+        <div class="tl-card"><div class="tl-title">淅川美年大健康（宛西分院）</div>
+          <div class="tl-detail">第一次全面体检，加做低剂量胸部 CT 看肺结节。空腹、带身份证。</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert orange">⚠️ <b>国庆假期提醒</b>：10.2 在国庆假期内，三甲医院多为"节假日值班门诊"，专家号和穿刺大概率要等节后。当天能顺利做完<b>甲状腺超声复核</b>、开好穿刺单，就算圆满。</div>
+
+  <div class="alert teal">🛡️ <b>理赔提示</b>：妈妈甲状腺 4a 是 2026-05-04 体检才发现的，而保单 3.20 已生效 → 属"投保后新发"，将来若确诊甲状腺癌正常理赔，不受"脑梗除外"影响（除外条款只管脑梗相关）。</div>
+</div>
+
+<!-- ============ 妈妈复查 ============ -->
+<div class="tab-content" id="t-m">
+  <div class="card">
+    <h3>🔴 甲状腺左叶结节 TI-RADS 4a <span class="badge" style="background:#fee2e2;color:#b91c1c;">头号急事</span></h3>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">39mm 大结节 + 点状钙化 + 形态不规则 + 丰富血流 · 恶性风险 5–10%</div>
+    <div><span class="pill red">必做</span>挂「甲状腺外科」，超声复核 + 评估细针穿刺（FNA）</div>
+  </div>
+  <div class="card">
+    <h3>🔴 脑梗二级预防 <span class="badge" style="background:#ffedd5;color:#c2410c;">不能忽视</span></h3>
+    <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">脑梗史 + 血压 159/75 未控 + 空腹血糖 6.32↑，都是脑血管危险因素</div>
+    <div><span class="pill orange">必做</span>挂「神经内科」，复查血压、糖化血红蛋白、血脂、颈动脉超声，调整降压药和二级预防用药</div>
+  </div>
+  <div class="card">
+    <h3>🟡 其他观察项</h3>
+    <table>
+      <tr><td>尿潜血弱阳性</td><td>复查尿常规（避开月经期、留中段尿）</td></tr>
+      <tr><td>左侧横膈抬高</td><td>医生建议查胸部 CT</td></tr>
+      <tr><td>中度脂肪肝 · BMI 35.9</td><td>控制饮食 + 有氧运动</td></tr>
+      <tr><td>右肾囊肿 25mm</td><td>年度复查即可，不急</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ============ 爸爸体检 ============ -->
+<div class="tab-content" id="t-d">
+  <div class="card">
+    <h3>👨 第一次全面体检</h3>
+    <div style="font-size:12px;line-height:1.8;">爸爸之前从未做过全面体检，这次用「众民保中高端」赠送的体检权益做一次<b>男性全套</b>：肝肾功能、血糖血脂、肿瘤标志物、腹部彩超、心电图、血压等。</div>
+  </div>
+  <div class="card">
+    <h3>🫁 肺结节 · 加做低剂量 CT</h3>
+    <div style="font-size:12px;line-height:1.8;">爸爸肺结节虽不大，但套餐默认的「胸部 X 光」看不清结节。<span class="pill orange">必做</span>自费加做<b>低剂量胸部 CT</b>，把结节看清楚留个底，方便以后对比。</div>
+  </div>
+  <div class="card">
+    <h3>📍 体检机构</h3>
+    <table>
+      <tr><th>机构</th><td><b>美年大健康体检中心（宛西分院）</b></td></tr>
+      <tr><th>地址</th><td>淅川县上亿广场东门对面（龙城街道富强路与广场路交叉口南 10 米）</td></tr>
+      <tr><th>预约</th><td>需提前 3 个工作日预约</td></tr>
+      <tr><th>到检</th><td>周一至周六 07:30–10:00，空腹、带身份证</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ============ 医院挂号 ============ -->
+<div class="tab-content" id="t-h">
+  <div class="card">
+    <h3>🏥 南阳市中心医院</h3>
+    <table>
+      <tr><th>级别</th><td>三甲综合 · 甲状腺外科为「豫西南甲状腺疾病专病医疗中心」</td></tr>
+      <tr><th>地址</th><td><b>河南省南阳市宛城区工农路 312 号</b></td></tr>
+      <tr><th>交通</th><td>公交 15 / 19 / 27 / 29 / 33 路</td></tr>
+      <tr><th>科室</th><td>甲状腺外科门诊在门诊楼南头；病房在一号楼 13 楼</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>📱 挂号渠道</h3>
+    <table>
+      <tr><th>微信公众号（主力）</th><td>微信搜「南阳市中心医院」→ 预约挂号</td></tr>
+      <tr><th>支付宝</th><td>搜「南阳市中心医院」小程序</td></tr>
+      <tr><th>官网</th><td>guahao.nych.cn</td></tr>
+      <tr><th>河南省预约平台</th><td>www.169000.net</td></tr>
+      <tr><th>电话</th><td>咨询 0377-61660800 / 查号台 0377-63200114</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>⏰ 放号规律</h3>
+    <table>
+      <tr><td>医院官方</td><td><b>每周五早 8:00</b> 开放下一周号源</td></tr>
+      <tr><td>169000 平台</td><td>甲状腺外科门诊<b>每天 10:00</b> 放号</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h3>📋 就诊流程</h3>
+    <div class="timeline">
+      <div class="tl-block"><div class="tl-time">第 1 步 · 实名预约</div><div class="tl-card"><div class="tl-detail">姓名 + 身份证号 + 手机号</div></div></div>
+      <div class="tl-block"><div class="tl-time">第 2 步 · 当天取号</div><div class="tl-card"><div class="tl-detail">带身份证 + 社保卡，提前 30 分钟到收费窗口取号</div></div></div>
+      <div class="tl-block"><div class="tl-time">第 3 步 · 办就诊卡</div><div class="tl-card"><div class="tl-detail">初诊先在办卡窗口办就诊卡，再持卡去分诊台候诊</div></div></div>
+      <div class="tl-block"><div class="tl-time">第 4 步 · 挂两个科</div><div class="tl-card"><div class="tl-detail">甲状腺外科（4a 结节）+ 神经内科（脑梗二级预防）</div></div></div>
+    </div>
+  </div>
+  <div class="card">
+    <h3>👨‍⚕️ 甲状腺外科专家</h3>
+    <div style="font-size:12px;line-height:1.8;">优选 <b>李伟汉</b>（科主任·主任医师）/ <b>郭满</b> / <b>高金亮</b>（擅长结节穿刺活检、微波消融）。挂不上专家就挂普通门诊，先开超声和穿刺单。</div>
+  </div>
+  <div class="card">
+    <h3>☎️ 关键电话</h3>
+    <div class="phone-grid">
+      <div class="phone-item"><div class="pn">甲状腺外科门诊</div><div class="pp">0377-61660131</div></div>
+      <div class="phone-item"><div class="pn">门诊办公室</div><div class="pp">0377-63200026</div></div>
+      <div class="phone-item"><div class="pn">咨询电话</div><div class="pp">0377-61660800</div></div>
+      <div class="phone-item"><div class="pn">查号台 / 总机</div><div class="pp">0377-63200114</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 待办清单 ============ -->
+<div class="tab-content" id="t-c">
+  <div class="card">
+    <h3>阶段一 · 现在 ~ 9 月底（节前准备）</h3>
+    <ul class="checklist">
+      <li><input type="checkbox" id="c1"><label for="c1">打电话确认国庆门诊安排<span class="sub">甲状腺外科门诊 0377-61660131 / 门诊办 0377-63200026，问清 10.2–10.8 哪天有门诊、当天能否做甲状腺超声</span></label></li>
+      <li><input type="checkbox" id="c2"><label for="c2">抢号：甲状腺外科 + 神经内科<span class="sub">每周五 8:00 官方放号 / 169000 每天 10:00，优先 10.2</span></label></li>
+      <li><input type="checkbox" id="c3"><label for="c3">约爸爸淅川美年体检<span class="sub">提前 3 个工作日，约在 10.3–10.7 之间</span></label></li>
+      <li><input type="checkbox" id="c4"><label for="c4">备齐妈妈材料<span class="sub">体检报告、身份证、医保卡、高血压药盒/用药清单、既往脑梗病历</span></label></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>阶段二 · 10.2 带妈妈去南阳</h3>
+    <ul class="checklist">
+      <li><input type="checkbox" id="c5"><label for="c5">早 7 点前出发（淅川→南阳约 100 公里、1.5 小时）</label></li>
+      <li><input type="checkbox" id="c6"><label for="c6">到院：办就诊卡 → 取号 → 甲状腺外科（先做超声复核）</label></li>
+      <li><input type="checkbox" id="c7"><label for="c7">神经内科：测血压、开糖化/血脂/颈动脉超声、调降压药</label></li>
+      <li><input type="checkbox" id="c8"><label for="c8">甲状腺穿刺单开好，约到节后<span class="sub">假期大概率做不了，别让穿刺卡住整体进度</span></label></li>
+    </ul>
+  </div>
+  <div class="card">
+    <h3>阶段三 · 10.3–10.7 爸爸体检</h3>
+    <ul class="checklist">
+      <li><input type="checkbox" id="c9"><label for="c9">淅川美年大健康体检<span class="sub">空腹、带身份证</span></label></li>
+      <li><input type="checkbox" id="c10"><label for="c10">加做「低剂量胸部 CT」看肺结节</label></li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  家庭体检复查 · 2026 十一 · 数据截至 2026-09 · 医疗建议请以医生诊断为准<br>
+  医院信息请就诊前电话二次确认
+</div>
+
+</div>
+
+<script>
+// Tab 切换
+const tabs = document.querySelectorAll('.tab');
+tabs.forEach(t => t.addEventListener('click', () => {
+  tabs.forEach(x => x.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(x => x.classList.remove('active'));
+  t.classList.add('active');
+  document.getElementById('t-' + t.dataset.t).classList.add('active');
+}));
+// 待办勾选本地保存
+document.querySelectorAll('.checklist input[type=checkbox]').forEach((cb) => {
+  cb.checked = localStorage.getItem('todo-' + cb.id) === '1';
+  cb.addEventListener('change', () => localStorage.setItem('todo-' + cb.id, cb.checked ? '1' : '0'));
+});
+</script>
+</body>
+</html>
